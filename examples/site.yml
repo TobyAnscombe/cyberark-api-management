@@ -1,0 +1,46 @@
+---
+# Example: authenticate to CyberArk and list accounts in a safe.
+#
+# Run:
+#   ansible-playbook examples/site.yml \
+#     -e cyberark_identity_tenant=YOUR_TENANT_ID \
+#     --vault-password-file ~/.vault_pass
+#
+# Vault-encrypt your secrets first:
+#   ansible-vault encrypt_string 'my-client-id'     --name cyberark_client_id
+#   ansible-vault encrypt_string 'my-client-secret' --name cyberark_client_secret
+
+- name: CyberArk privileged access example
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    cyberark_identity_tenant: "YOUR_TENANT_ID"
+    # cyberark_client_id: !vault |
+    #   $ANSIBLE_VAULT;1.1;AES256
+    #   ...
+    # cyberark_client_secret: !vault |
+    #   $ANSIBLE_VAULT;1.1;AES256
+    #   ...
+
+  roles:
+    - cyberark_auth
+
+  tasks:
+    - name: List accounts in a safe
+      uri:
+        url: "https://YOUR_SUBDOMAIN.privilegecloud.cyberark.cloud/passwordvault/api/Accounts"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ cyberark_token }}"
+        validate_certs: true
+      register: accounts_response
+      delegate_to: localhost
+      run_once: true
+      no_log: true
+
+    - name: Show account names
+      debug:
+        msg: "{{ accounts_response.json.value | map(attribute='name') | list }}"
+      delegate_to: localhost
+      run_once: true

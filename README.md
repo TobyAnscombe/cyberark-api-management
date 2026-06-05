@@ -29,6 +29,13 @@ All three variables are required and have no default — the role will fail fast
 |---|---|
 | `cyberark_token` | Bearer token set on all hosts; use as `Authorization: Bearer {{ cyberark_token }}` |
 
+## Token lifetime
+
+CyberArk Identity tokens expire after **~1 hour** (the exact TTL is returned in `expires_in` on the auth response but is not exposed by this role). Be aware of two scenarios:
+
+- **Long-running plays** — if a play takes longer than the token TTL, API calls late in the run will fail with 401. Break long plays into shorter runs and include this role at the top of each.
+- **Fact cache across plays** — `cacheable: true` persists `cyberark_token` to the Ansible fact cache. A subsequent play that hits the cache will silently use a stale token if the cache TTL outlives the token TTL. Either set your fact cache TTL below 3600 seconds, or explicitly include this role at the start of every play rather than relying on the cache.
+
 ## Usage
 
 Install the role:
