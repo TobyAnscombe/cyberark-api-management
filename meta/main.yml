@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: TobyAnscombe
+  namespace: tobyanscombe
+  role_name: cyberark_auth
+  description: Authenticates to CyberArk and exposes the bearer token as cyberark_token
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: EL
+      versions: ["8", "9"]
+    - name: Ubuntu
+      versions: [bionic, focal, jammy, noble]
+    - name: Debian
+      versions: [bullseye, bookworm]
+
+dependencies: []

@@ -1,0 +1,16 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  secret-scan:
+    uses: TobyAnscombe/github-actions/.github/workflows/gitleaks.yml@main
+
+  ansible-lint:
+    uses: TobyAnscombe/github-actions/.github/workflows/ansible-ci.yml@main
+    with:
+      requirements_file: ""

@@ -1,0 +1,6 @@
+---
+# Override in playbook vars or Ansible Vault
+cyberark_identity_tenant: ""
+cyberark_client_id: ""
+cyberark_client_secret: ""
+cyberark_validate_certs: true

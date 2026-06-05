@@ -1,0 +1,45 @@
+---
+- name: Validate required CyberArk variables
+  assert:
+    that:
+      - cyberark_identity_tenant | trim | length > 0
+      - cyberark_client_id | trim | length > 0
+      - cyberark_client_secret | trim | length > 0
+    fail_msg: "cyberark_identity_tenant, cyberark_client_id, and cyberark_client_secret must all be set"
+  run_once: true
+  delegate_to: localhost
+
+- name: Authenticate to CyberArk
+  uri:
+    url: "https://{{ cyberark_identity_tenant }}.id.cyberark.cloud/oauth2/platformtoken"
+    method: POST
+    body_format: form-urlencoded
+    body:
+      grant_type: client_credentials
+      client_id: "{{ cyberark_client_id }}"
+      client_secret: "{{ cyberark_client_secret }}"
+    status_code: [200]
+    timeout: 30
+    validate_certs: "{{ cyberark_validate_certs }}"
+  register: _cyberark_auth_response
+  delegate_to: localhost
+  run_once: true
+  no_log: true
+
+- name: Verify CyberArk token was returned
+  assert:
+    that:
+      - _cyberark_auth_response.json.access_token is defined
+      - _cyberark_auth_response.json.access_token | trim | length > 0
+    fail_msg: "CyberArk authentication succeeded but no access_token was returned"
+  run_once: true
+  delegate_to: localhost
+  no_log: true
+
+# Set on all hosts so cyberark_token is available globally within the play.
+# cacheable: true persists it to the fact cache for subsequent plays.
+- name: Expose CyberArk token as global fact
+  set_fact:
+    cyberark_token: "{{ _cyberark_auth_response.json.access_token }}"
+    cacheable: true
+  no_log: true

@@ -1,0 +1,5 @@
+profile: basic
+
+skip_list:
+  # authorized_keys file may not exist on first run — ignore_errors is intentional
+  - ignore-errors
