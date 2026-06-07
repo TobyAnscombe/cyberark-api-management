@@ -24,7 +24,7 @@
     #   ...
 
   roles:
-    - cyberark_auth
+    - cyberark_api_authentication
 
   tasks:
     - name: List accounts in a safe

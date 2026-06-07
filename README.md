@@ -1,4 +1,4 @@
-# cyberark_auth
+# cyberark_api_authentication
 
 Ansible role that authenticates to CyberArk Identity using OAuth2 client credentials and exposes the resulting bearer token as `cyberark_token` on all hosts in the play.
 
@@ -43,7 +43,7 @@ Install the role:
 ```yaml
 # requirements.yml
 roles:
-  - name: cyberark_auth
+  - name: cyberark_api_authentication
     src: https://github.com/TobyAnscombe/cyberark-api-management
     version: main
 ```
@@ -65,7 +65,7 @@ Call the role from your playbook and use the token in subsequent tasks:
     # ansible-vault encrypt_string '...' --name cyberark_client_id
 
   roles:
-    - cyberark_auth
+    - cyberark_api_authentication
 
   tasks:
     - name: List accounts in a safe

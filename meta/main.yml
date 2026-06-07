@@ -2,7 +2,7 @@
 galaxy_info:
   author: TobyAnscombe
   namespace: tobyanscombe
-  role_name: cyberark_auth
+  role_name: cyberark_api_authentication
   description: Authenticates to CyberArk and exposes the bearer token as cyberark_token
   license: MIT
   min_ansible_version: "2.9"
