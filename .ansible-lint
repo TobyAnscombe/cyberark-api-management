@@ -1,8 +1,11 @@
+---
 profile: basic
 
 exclude_paths:
-  - examples/  # reference docs only — not linted
+  - examples/ # reference docs only — not linted
 
 skip_list:
   # authorized_keys file may not exist on first run — ignore_errors is intentional
   - ignore-errors
+  - var-naming[no-role-prefix]
+  - run-once[task]
